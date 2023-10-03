@@ -20,15 +20,6 @@ target_link_libraries(sponzatestapp PUBLIC
     Qt::Quick3DPrivate
 )
 
-qt6_add_resources(sponzatestapp "sponzatestapp"
-    PREFIX
-        "/"
-    FILES
-        "main.qml"
-        "Sponza.qml"
-        "Suzanne.qml"
-)
-
 qt6_add_shaders(sponzatestapp "shaders"
     PREFIX
         "/"
@@ -138,8 +129,11 @@ qt_add_qml_module(sponzatestapp
         SponzaTestApp
     QML_FILES
         main.qml
+        Sponza.qml
+        Suzanne.qml
     SOURCES
         triangle.cpp triangle.h
     RESOURCE_PREFIX
         /
+    NO_RESOURCE_TARGET_PATH
 )
