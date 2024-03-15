@@ -3,22 +3,22 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick3D
 import QtQuick3D.Helpers
-import SponzaTestApp
+//import SponzaTestApp
 
 Item {
     View3D {
         id: v3d
         anchors.fill: parent
 
-        extensions: [
-            TriangleExtension {
-                enabled: cbExt.checked
-                NumberAnimation on rotation { from: 0; to: 360; duration: 4000; loops: -1 }
-                y: 50
-                x: -100
-                scale: 50
-            }
-        ]
+        // extensions: [
+        //     TriangleExtension {
+        //         enabled: cbExt.checked
+        //         NumberAnimation on rotation { from: 0; to: 360; duration: 4000; loops: -1 }
+        //         y: 50
+        //         x: -100
+        //         scale: 50
+        //     }
+        // ]
 
         environment: SceneEnvironment {
             id: env

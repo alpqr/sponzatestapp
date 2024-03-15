@@ -131,8 +131,8 @@ qt_add_qml_module(sponzatestapp
         main.qml
         Sponza.qml
         Suzanne.qml
-    SOURCES
-        triangle.cpp triangle.h
+    # SOURCES
+    #     triangle.cpp triangle.h
     RESOURCE_PREFIX
         /
     NO_RESOURCE_TARGET_PATH
