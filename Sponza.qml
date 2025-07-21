@@ -6,6 +6,7 @@ Node {
     property alias usedInBakedLighting: nodes_0_.usedInBakedLighting
     property alias lightmapBaseResolution: nodes_0_.lightmapBaseResolution
     property alias bakedLightmap: nodes_0_.bakedLightmap
+    property alias texelsPerUnit: nodes_0_.texelsPerUnit
 
     // Materials
     PrincipledMaterial {

@@ -101,7 +101,6 @@ Item {
 
             Suzanne {
                 usedInBakedLighting: true
-                lightmapBaseResolution: 256 // reduce it, we know that this model in this scene does not need an 1000+ size lightmap
                 bakedLightmap: BakedLightmap {
                     enabled: root.lightmapEnabled
                     key: "suzanne1"
@@ -256,6 +255,10 @@ Item {
 
             Sponza {
                 usedInBakedLighting: true
+
+                // the default 1 would lead to like a 10000x10000 lightmap, which is not ideal
+                texelsPerUnit: 0.1
+
                 bakedLightmap: BakedLightmap {
                     enabled: root.lightmapEnabled
                     key: "sponza1"
