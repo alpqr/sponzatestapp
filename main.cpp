@@ -7,7 +7,6 @@ int main(int argc, char *argv[])
 {
     qputenv("QSG_INFO", "1");
     qputenv("QSG_RHI_PROFILE", "1");
-    qputenv("QT_QUICK_CONTROLS_STYLE", "Basic");
     QGuiApplication app(argc, argv);
     QSurfaceFormat::setDefaultFormat(QQuick3D::idealSurfaceFormat());
 

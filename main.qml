@@ -313,7 +313,7 @@ Item {
                         CheckBox {
                             id: cbLm
                             text: "Use baked lightmap"
-                            checked: false
+                            checked: true
                         }
                         CheckBox {
                             id: cbShadows

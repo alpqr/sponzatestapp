@@ -7,7 +7,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 COMPONENTS Core Gui Qml Quick Quick3D ShaderTools)
+find_package(Qt6 COMPONENTS Core Gui Qml Quick Quick3D ShaderTools OPTIONAL_COMPONENTS GuiPrivate Quick3DPrivate)
 
 qt_add_executable(sponzatestapp
     main.cpp
@@ -28,19 +28,18 @@ qt6_add_shaders(sponzatestapp "shaders"
         "color.frag"
 )
 
-# qt6_add_resources(sponzatestapp "sponzatestapp_lightmaps"
-#     PREFIX
-#         "/"
-#     FILES
-#         "qlm_sponza1.exr"
-#         "qlm_suzanne1.exr"
-# )
-
 qt6_add_lightprobe_images(sponzatestapp "ibl_assets"
     PREFIX
         "/"
     FILES
         "00455_OpenfootageNET_field_low.hdr"
+)
+
+qt6_add_resources(sponzatestapp "sponzatestapp_assets0"
+    PREFIX
+        "/"
+    FILES
+        qtquickcontrols2.conf
 )
 
 qt6_add_resources(sponzatestapp "sponzatestapp_assets"
