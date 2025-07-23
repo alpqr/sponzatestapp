@@ -39,7 +39,10 @@ qt6_add_resources(sponzatestapp "sponzatestapp_assets0"
     PREFIX
         "/"
     FILES
-        qtquickcontrols2.conf
+        "qtquickcontrols2.conf"
+        "ssgi_1.frag"
+        "ssgi_2.frag"
+        "ssgi_3.frag"
 )
 
 qt6_add_resources(sponzatestapp "sponzatestapp_assets"
@@ -130,6 +133,7 @@ qt_add_qml_module(sponzatestapp
         main.qml
         Sponza.qml
         Suzanne.qml
+        SSGIEffect.qml
     # SOURCES
     #     triangle.cpp triangle.h
     RESOURCE_PREFIX
