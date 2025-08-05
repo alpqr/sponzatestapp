@@ -35,12 +35,6 @@ Item {
 
             antialiasingMode: cbMsaa.checked ? SceneEnvironment.MSAA : SceneEnvironment.NoAA
             antialiasingQuality: SceneEnvironment.High // 4x
-
-            effects: []
-        }
-
-        SSGIEffect {
-            id: ssgiEffect
         }
 
         Texture {
@@ -115,7 +109,6 @@ Item {
                 y: 1
                 scale: Qt.vector3d(0.5, 0.5, 0.5)
                 eulerRotation.y: -90
-                opacity: 0.5
             }
 
             PointLight {
@@ -338,17 +331,9 @@ Item {
                             checked: false
                         }
                         CheckBox {
-                            //id: cbExt
-                            //text: "Show thing"
-                            id: cbSsgi
-                            text: "SSAO/GI"
+                            id: cbExt
+                            text: "Show thing"
                             checked: false
-                            onCheckedChanged: {
-                                if (checked)
-                                    env.effects = [ ssgiEffect ];
-                                else
-                                    env.effects = [];
-                            }
                         }
                         CheckBox {
                             id: cbRenderCont
