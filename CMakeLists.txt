@@ -41,7 +41,8 @@ qt6_add_resources(sponzatestapp "sponzatestapp_assets0"
     FILES
         "qtquickcontrols2.conf"
         "ssgi_1.frag"
-        "ssgi_2.frag"
+        "ssgi_2_dualfilter_blur_down.frag"
+        "ssgi_2_dualfilter_blur_up.frag"
         "ssgi_3.frag"
 )
 

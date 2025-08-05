@@ -10,6 +10,12 @@
 #define PROJECTION PROJECTION_MATRIX
 #endif
 
+#if QSHADER_VIEW_COUNT >= 2
+#define SAMPLE_LAST_FRAME_INDIRECT_AND_AO(uv) texture(blurredIndirectAndAoSampler, vec3(uv, VIEW_INDEX))
+#else
+#define SAMPLE_LAST_FRAME_INDIRECT_AND_AO(uv) texture(blurredIndirectAndAoSampler, uv)
+#endif
+
 vec3 getPos(vec2 uv)
 {
     float depth = SAMPLE_DEPTH(uv);
@@ -18,7 +24,10 @@ vec3 getPos(vec2 uv)
     float zd = depth; // why not linearized? but it sucks when we do, so don't
 
     float aspect = INPUT_SIZE.x / INPUT_SIZE.y;
-    float fovRad = radians(fov);
+    //float fovRad = radians(60.0);
+    float fovRad = 2.0 * atan(1.0 / PROJECTION[1][1]);
+    if (NDC_Y_UP < 0.0)
+        fovRad *= -1.0;
     float halfFovTan = tan(0.5 * fovRad);
     vec3 viewPos = vec3(ndc.x * aspect * halfFovTan * zd, ndc.y * halfFovTan * zd, -zd);
 
@@ -29,10 +38,10 @@ vec3 getPos(vec2 uv)
 
 vec3 getNormal(vec2 uv)
 {
-    return normalize(SAMPLE_NORMAL(uv));
+    return normalize(mat3(VIEW_MATRIX) * SAMPLE_NORMAL(uv));
 }
 
-uint countBits(uint value) // just because there is no bitCount() in GLSL < 400
+uint countBits(uint value) // there is no bitCount() in GLSL < 400
 {
     // https://graphics.stanford.edu/%7Eseander/bithacks.html
     value = value - ((value >> 1u) & 0x55555555u);
@@ -84,22 +93,28 @@ vec4 SSILVB()
             const vec2 sampleUV = INPUT_UV - qt_normalAdjustViewportFactor * (sampleStep * sampleScale * omega * aspect);
             const vec3 samplePosition = getPos(sampleUV);
             const vec3 sampleNormal = getNormal(sampleUV);
-            const vec3 sampleLight = SAMPLE_INPUT(sampleUV).rgb;
             const vec3 sampleDistance = samplePosition - position;
             const float sampleLength = length(sampleDistance);
             const vec3 sampleHorizon = sampleDistance / sampleLength;
-
             vec2 minMaxHorizon = acos(vec2(dot(sampleHorizon, camera), dot(normalize(sampleDistance - camera * hitThickness), camera)));
             minMaxHorizon = clamp((minMaxHorizon + n + halfPi) / pi, 0.0, 1.0);
+
             // https://cdrinmatane.github.io/posts/ssaovb-code/
             uint startBit = uint(minMaxHorizon.x * float(sectorCount));
             uint horizonAngle = uint(ceil((minMaxHorizon.y - minMaxHorizon.x) * float(sectorCount)));
             uint angleBit = horizonAngle > 0 ? uint(0xFFFFFFFFu >> (sectorCount - horizonAngle)) : 0;
             indirect = angleBit << startBit;
 
-            lighting += (1.0 - float(countBits(indirect & ~occlusion)) / float(sectorCount))
-                * sampleLight * clamp(dot(normal, sampleHorizon), 0.0, 1.0)
-                * clamp(dot(sampleNormal, -sampleHorizon), 0.0, 1.0);
+            if (indirectLightEnabled || debugMode != 0) {
+                vec3 sampleLight = SAMPLE_INPUT(sampleUV).rgb;
+                if (fakeLightBounce) {
+                    vec3 indirectFromLastFrame = SAMPLE_LAST_FRAME_INDIRECT_AND_AO(sampleUV).rgb;
+                    sampleLight = sampleLight * (1.0 + indirectFromLastFrame * indirectLightBoost);
+                }
+                lighting += (1.0 - float(countBits(indirect & ~occlusion)) / float(sectorCount))
+                    * sampleLight * clamp(dot(normal, sampleHorizon), 0.0, 1.0)
+                    * clamp(dot(sampleNormal, -sampleHorizon), 0.0, 1.0);
+            }
 
             occlusion |= indirect;
         }
@@ -116,9 +131,9 @@ void MAIN()
 {
     vec4 indirectAndAo = SSILVB();
 
-    if (renderMode == 6)
+    if (debugMode == 6)
         FRAGCOLOR = vec4(getPos(INPUT_UV), 1.0);
-    else if (renderMode == 7)
+    else if (debugMode == 7)
         FRAGCOLOR = vec4(getNormal(INPUT_UV), 1.0);
     else
         FRAGCOLOR = indirectAndAo;

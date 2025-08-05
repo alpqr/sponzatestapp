@@ -14,26 +14,26 @@ void MAIN()
     float ao = indirectAndAo.a;
     vec3 indirect = indirectAndAo.rgb;
 
-    if (renderMode == 0)
-        if (indirectApplyMode == 0)
-            FRAGCOLOR = vec4(sceneColor.rgb * ao * (1.0 + indirect * indirectBoost), sceneColor.a);
-        else
-            FRAGCOLOR = vec4(sceneColor.rgb * ao + indirect * indirectBoost, sceneColor.a);
-    else if (renderMode == 1)
+    if (debugMode == 0)
+        // if (indirectApplyMode == 0)
+            FRAGCOLOR = vec4(sceneColor.rgb * ao * (1.0 + indirect * indirectLightBoost), sceneColor.a);
+        // else
+        //     FRAGCOLOR = vec4(sceneColor.rgb * ao + indirect * indirectLightBoost, sceneColor.a);
+    else if (debugMode == 1)
         FRAGCOLOR = sceneColor;
-    else if (renderMode == 2)
-        if (indirectApplyMode == 0)
-            FRAGCOLOR = vec4(sceneColor.rgb * (1.0 + indirect * indirectBoost), sceneColor.a);
-        else
-            FRAGCOLOR = vec4(sceneColor.rgb + indirect * indirectBoost, sceneColor.a);
-    else if (renderMode == 3)
+    else if (debugMode == 2)
+        // if (indirectApplyMode == 0)
+            FRAGCOLOR = vec4(sceneColor.rgb * (1.0 + indirect * indirectLightBoost), sceneColor.a);
+        // else
+        //     FRAGCOLOR = vec4(sceneColor.rgb + indirect * indirectLightBoost, sceneColor.a);
+    else if (debugMode == 3)
         FRAGCOLOR = vec4(sceneColor.rgb * ao, sceneColor.a);
-    else if (renderMode == 4)
+    else if (debugMode == 4)
         FRAGCOLOR = vec4(indirect, 1.0);
-    else if (renderMode == 5)
+    else if (debugMode == 5)
         FRAGCOLOR = vec4(vec3(ao), 1.0);
-    else if (renderMode == 6)
+    else if (debugMode == 6)
         FRAGCOLOR = vec4(indirectAndAo.rgb, 1.0); // just the positions
-    else if (renderMode == 7)
+    else if (debugMode == 7)
         FRAGCOLOR = vec4(indirectAndAo.rgb, 1.0); // just the normals
 }
